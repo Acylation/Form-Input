@@ -11,9 +11,35 @@ let pinyin2IndexMap = {};
 //候选列表
 let candidateList = [];
 
+//https://stackoverflow.com/questions/38241480/detect-macos-ios-windows-android-and-linux-os-with-js
+const getOS = () => {
+  const userAgent = window.navigator.userAgent,
+    platform =
+      window.navigator?.userAgentData?.platform || window.navigator.platform,
+    macosPlatforms = ["macOS", "Macintosh", "MacIntel", "MacPPC", "Mac68K"],
+    windowsPlatforms = ["Win32", "Win64", "Windows", "WinCE"],
+    iosPlatforms = ["iPhone", "iPad", "iPod"];
+  let os = null;
+
+  if (macosPlatforms.indexOf(platform) !== -1) {
+    os = "Mac OS";
+  } else if (iosPlatforms.indexOf(platform) !== -1) {
+    os = "iOS";
+  } else if (windowsPlatforms.indexOf(platform) !== -1) {
+    os = "Windows";
+  } else if (/Android/.test(userAgent)) {
+    os = "Android";
+  } else if (/Linux/.test(platform)) {
+    os = "Linux";
+  }
+  return os;
+};
+
+let os = getOS();
+
 document.addEventListener("keydown", function (event) {
   if (chrome.runtime?.id) {
-    if (event.key === "i" && event.altKey) {
+    if (event.key === "i" && os == "Mac OS" ? event.metaKey : event.altKey) {
       chrome.storage.local.get().then((map) => {
         toggleWindow(map);
       });
