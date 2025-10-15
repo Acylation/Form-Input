@@ -39,7 +39,7 @@ let os = getOS();
 
 document.addEventListener("keydown", function (event) {
   if (chrome.runtime?.id) {
-    if (event.key === "i" && os == "Mac OS" ? event.metaKey : event.altKey) {
+    if (event.key === "i" && (os == "Mac OS" ? event.metaKey : event.altKey)) {
       chrome.storage.local.get().then((map) => {
         toggleWindow(map);
       });
